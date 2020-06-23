@@ -11,10 +11,14 @@ class CategoryTest extends TestCase
 {
     public function testIfUseTraits(){
         $traits = [
-            SoftDeletes::class, Uuid::class
+            Uuid::class,
+            SoftDeletes::class
         ];
         $categoryTraits = array_keys(class_uses(Category::class));
-        $this->assertEquals($traits, $categoryTraits);
+        foreach($traits as $trait) {
+            $this->assertContains($trait, $categoryTraits);
+        }
+        $this->assertCount(count($traits), $categoryTraits);
     }
 
     public function testFillableAttribute()
