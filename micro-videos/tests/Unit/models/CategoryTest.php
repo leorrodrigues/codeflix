@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Models;
 
 use App\Models\Category;
 use App\Models\Traits\Uuid;
@@ -20,10 +20,7 @@ class CategoryTest extends TestCase
             SoftDeletes::class
         ];
         $categoryTraits = array_keys(class_uses(Category::class));
-        foreach($traits as $trait) {
-            $this->assertContains($trait, $categoryTraits);
-        }
-        $this->assertCount(count($traits), $categoryTraits);
+        $this->assertEqualsCanonicalizing($traits, $categoryTraits);
     }
 
     public function testFillableAttribute()
@@ -34,7 +31,7 @@ class CategoryTest extends TestCase
 
     public function testCastsAttribute()
     {
-        $casts = ['id' => 'string'];
+        $casts = ['id' => 'string', 'is_active' => 'boolean'];
         $this->assertEquals($casts, $this->category->getCasts());
     }
 
@@ -46,9 +43,7 @@ class CategoryTest extends TestCase
     public function testDatesAttribute()
     {
         $dates = ['deleted_at', 'created_at', 'updated_at'];
-        foreach($dates as $date) {
-            $this->assertContains($date, $this->category->getDates());
-        }
-        $this->assertCount(count($dates), $this->category->getDates());
+
+        $this->assertEqualsCanonicalizing($dates, $this->category->getDates());
     }
 }
