@@ -7,7 +7,6 @@ services:
           context: .
           dockerfile: .docker/app/Dockerfile
         container_name: micro-videos-app
-        entrypoint: dockerize -wait tcp://db:3306 -timeout 120s ./.docker/entrypoint.sh
         volumes:
             - .:/var/www
         networks:
