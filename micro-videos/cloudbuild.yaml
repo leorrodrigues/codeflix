@@ -9,11 +9,11 @@ steps:
 
   - id: 'Copying .env'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'micro-videos-app', 'cp', 'micro-videos/.env.example','.env']
+    args: ['exec', '-t', 'micro-videos-app', 'cp', './micro-videos/.env.example','.env']
 
   - id: 'Copying .env.testing'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'micro-videos-app', 'cp', 'micro-videos/.env.testing.example','.env.testing']
+    args: ['exec', '-t', 'micro-videos-app', 'cp', './micro-videos/.env.testing.example','.env.testing']
 
   - id: 'Running key:generate'
     name: 'gcr.io/cloud-builders/docker'
