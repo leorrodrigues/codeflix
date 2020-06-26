@@ -1,0 +1,8 @@
+[2020-06-26 01:28:24] testing.ERROR: Access level to App\Models\Category::$incrementing must be public (as in class Illuminate\Database\Eloquent\Model) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 64): Access level to App\\Models\\Category::$incrementing must be public (as in class Illuminate\\Database\\Eloquent\\Model) at /var/www/app/Models/Category.php:8)
+[stacktrace]
+#0 {main}
+"} 
+[2020-06-26 01:28:24] testing.ERROR: Access level to App\Models\Category::$incrementing must be public (as in class Illuminate\Database\Eloquent\Model) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 64): Access level to App\\Models\\Category::$incrementing must be public (as in class Illuminate\\Database\\Eloquent\\Model) at /var/www/app/Models/Category.php:8)
+[stacktrace]
+#0 {main}
+"} 
