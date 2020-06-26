@@ -12,5 +12,8 @@ npm-debug.log
 yarn-error.log
 _ide_helper*.php
 .docker/dbdata/*
-storage/framework/*
+storage/framework/sessions/*
+storage/framework/testing/*
+storage/framework/views/*
+storage/framework/cache/*
 
