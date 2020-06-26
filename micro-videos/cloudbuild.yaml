@@ -1,7 +1,7 @@
 steps:
   - id: 'Running docker-compose'
     name: 'gcr.io/$PROJECT_ID/docker-compose'
-    args: ['-f','/micro-videos/docker-compose.prod.yaml', 'up', '-d']
+    args: ['-f','micro-videos/docker-compose.prod.yaml', 'up', '-d']
 
   - id: 'Running composer'
     name: 'gcr.io/cloud-builders/docker'
@@ -9,11 +9,11 @@ steps:
 
   - id: 'Copying .env'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'micro-videos-app', 'cp', '/micro-videos/.env.example','.env']
+    args: ['exec', '-t', 'micro-videos-app', 'cp', 'micro-videos/.env.example','.env']
 
   - id: 'Copying .env.testing'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'micro-videos-app', 'cp', '/micro-videos/.env.testing.example','.env.testing']
+    args: ['exec', '-t', 'micro-videos-app', 'cp', 'micro-videos/.env.testing.example','.env.testing']
 
   - id: 'Running key:generate'
     name: 'gcr.io/cloud-builders/docker'
