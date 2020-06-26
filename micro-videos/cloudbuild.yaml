@@ -25,4 +25,4 @@ steps:
 
   - id: 'Running PhpUnit'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','micro-videos-app','php','/var/www/vendor/bin/phpunit','-c','/var/ww/phpunit.xml']
+    args: [ 'exec','-t','micro-videos-app','php','/var/www/vendor/bin/phpunit','-c','/var/www/phpunit.xml']
