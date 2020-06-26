@@ -1,0 +1,9 @@
+.git
+Dockerfile
+.DS_Store
+.gitignore
+README.md
+/k8s/*
+.docker/dbdata/*
+.env
+.env.testing
