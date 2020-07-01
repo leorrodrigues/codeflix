@@ -156,7 +156,7 @@ class GenreControllerTest extends TestCase
             route('categories.destroy', ['genre' => $genre->id])
         );
 
-        $response->assertNoContent($status = 204);
+        $response->assertStatus(204);
 
         $this->assertNull(Genre::find($genre->id));
 
