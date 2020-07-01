@@ -153,7 +153,7 @@ class GenreControllerTest extends TestCase
         $genre = factory(Genre::class)->create();
         $response = $this->json(
             'DELETE',
-            route('categories.destroy', ['genre' => $genre->id])
+            route('genres.destroy', ['genre' => $genre->id])
         );
 
         $response->assertStatus(204);
