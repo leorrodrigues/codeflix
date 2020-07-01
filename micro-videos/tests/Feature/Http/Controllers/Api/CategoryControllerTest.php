@@ -193,8 +193,6 @@ class CategoryControllerTest extends TestCase
             route('categories.destroy', ['category' => $category->id])
         );
 
-        print_r($response);
-
         $response->assertStatus(204);
 
         $this->assertNull(Category::find($category->id));
