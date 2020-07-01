@@ -23,7 +23,6 @@ class CategoryControllerTest extends TestCase
             ->assertJson([$category->toArray()]);
     }
 
-
     public function testShow()
     {
         $category = factory(Category::class)->create();
@@ -184,5 +183,21 @@ class CategoryControllerTest extends TestCase
         $response->assertJsonFragment([
             'description' => null,
         ]);
+    }
+
+    public function testDelete()
+    {
+        $category = factory(Category::class)->create();
+        $response = $this->json(
+            'DELETE',
+            route('categories.destroy', ['category' => $category->id])
+        );
+
+        $response->assertStatus(204);
+
+        $this->assertNull(Category::find($category->id));
+
+        $this->assertNotNull(Category::withTrashed()->find($category->id));
+
     }
 }
