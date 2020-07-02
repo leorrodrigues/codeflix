@@ -44,7 +44,7 @@ class GenreControllerTest extends TestCase
 
     public function testInvalidationData()
     {
-        $data = [];
+        $data = ['name' => ''];
         $this->assertInvalidationInStoreAction($data, 'required');
 
         $data = [
@@ -106,5 +106,21 @@ class GenreControllerTest extends TestCase
 
         $this->assertNotNull(Genre::withTrashed()->find($genre->id));
 
+    }
+
+
+    protected function routeStore()
+    {
+        return route('genres.store');
+    }
+
+    protected function routeUpdate()
+    {
+        return route('genres.update', ['genre' => $this->genre->id]);
+    }
+
+    protected function model()
+    {
+        return Genre::class;
     }
 }
