@@ -13,7 +13,7 @@ class CastMember extends Model
     const TYPE_DIRECTOR = 1;
     const TYPE_ACTOR = 2;
 
-    public static $types = [CastMember::TYPE_DIRECTOR, CastMember::TYPE_ACTOR];
+    public static $types = [self::TYPE_DIRECTOR, self::TYPE_ACTOR];
 
     protected $fillable = ['name', 'type', 'is_active'];
     protected $dates = ['deleted_at'];
