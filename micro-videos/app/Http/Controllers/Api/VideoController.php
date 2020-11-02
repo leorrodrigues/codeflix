@@ -26,23 +26,34 @@ class VideoController extends BasicCrudController
 
     public function store(Request $request){
         $validatedData = $this->validate($request, $this->rulesStore());
-        /** @var Video $obj */
-        $obj = $this->model()::create($validatedData);
-        $obj->categories()->sync($request->get('categories_id'));
-        $obj->genres()->sync($request->get('genres_id'));
-        $obj->refresh();
-        return $obj;
 
+        $obj = \DB::transaction(function() use ($request, $validatedData){
+            /** @var Video $obj */
+            $obj = $this->model()::create($validatedData);
+            $obj->categories()->sync($request->get('categories_id'));
+            $obj->genres()->sync($request->get('genres_id'));
+            return $obj;
+        });
+
+        $obj->refresh();
+
+        return $obj;
     }
 
     public function update(Request $request, $id){
         $obj = $this->findOrFail($id);
         $validatedData = $this->validate($request, $this->rulesUpdate());
-        $obj->update($validatedData);
-        $obj->categories()->sync($request->get('categories_id'));
-        $obj->genres()->sync($request->get('genres_id'));
-        return $obj;
 
+        $obj = \DB::transaction(function () use ($request, $validatedData){
+            /** @var Video $obj */
+            $obj->update($validatedData);
+            $obj->categories()->sync($request->get('categories_id'));
+            $obj->genres()->sync($request->get('genres_id'));
+        });
+
+        $obj->refresh();
+
+        return $obj;
     }
 
     protected function model()
