@@ -46,6 +46,7 @@ class GenreControllerTest extends TestCase
     {
         $data = ['name' => ''];
         $this->assertInvalidationInStoreAction($data, 'required');
+        $this->assertInvalidationInUpdateAction($data, 'required');
 
         $data = [
             'name' => str_repeat('a', 256),
@@ -79,9 +80,6 @@ class GenreControllerTest extends TestCase
 
     public function testUpdate()
     {
-        $this->genre = factory(Genre::class)->create([
-            'is_active' => false,
-        ]);
         $data = [
             'name' => 'test',
             'is_active' => true,
