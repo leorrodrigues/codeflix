@@ -1,0 +1,12 @@
+[2020-07-02 12:59:22] testing.ERROR: Class Tests\Stubs\Controllers\CategoryControllerStub contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (App\Http\Controllers\Api\BasicCrudController::routeStore, App\Http\Controllers\Api\BasicCrudController::routeUpdate) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Class Tests\\Stubs\\Controllers\\CategoryControllerStub contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (App\\Http\\Controllers\\Api\\BasicCrudController::routeStore, App\\Http\\Controllers\\Api\\BasicCrudController::routeUpdate) at /var/www/tests/Stubs/Controllers/CategoryControllerStub.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2020-07-02 12:59:22] testing.ERROR: Class Tests\Stubs\Controllers\CategoryControllerStub contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (App\Http\Controllers\Api\BasicCrudController::routeStore, App\Http\Controllers\Api\BasicCrudController::routeUpdate) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Class Tests\\Stubs\\Controllers\\CategoryControllerStub contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (App\\Http\\Controllers\\Api\\BasicCrudController::routeStore, App\\Http\\Controllers\\Api\\BasicCrudController::routeUpdate) at /var/www/tests/Stubs/Controllers/CategoryControllerStub.php:7)
+[stacktrace]
+#0 {main}
+"} 
+[2020-07-02 12:59:22] testing.ERROR: Class Tests\Stubs\Controllers\CategoryControllerStub contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (App\Http\Controllers\Api\BasicCrudController::routeStore, App\Http\Controllers\Api\BasicCrudController::routeUpdate) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Class Tests\\Stubs\\Controllers\\CategoryControllerStub contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (App\\Http\\Controllers\\Api\\BasicCrudController::routeStore, App\\Http\\Controllers\\Api\\BasicCrudController::routeUpdate) at /var/www/tests/Stubs/Controllers/CategoryControllerStub.php:7)
+[stacktrace]
+#0 {main}
+"} 
