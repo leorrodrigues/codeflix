@@ -3,11 +3,19 @@
 namespace Tests\Feature\Http\Controllers\Api;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use App\Models\Video;
-use Tests\TestCase;
-use Tests\Traits\TestSaves;
-use Tests\Traits\TestValidations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Http\Request;
+use Tests\TestCase;
+use Lang;
+use Tests\Traits\TestValidations;
+use Tests\Traits\TestSaves;
+use Tests\Exceptions\TestException;
+use App\Http\Controllers\Api\VideoController;
+use App\Models\Video;
+use App\Models\Category;
+use App\Models\Genre;
 
 class VideoControllerTest extends TestCase
 {
@@ -19,7 +27,10 @@ class VideoControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->video = factory(Video::class)->create();
+
+        $this->video = factory(Video::class)->create([
+            'opened' => false
+        ]);
         $this->sendData = [
             'title' => 'title',
             'description' => 'description',
@@ -108,17 +119,30 @@ class VideoControllerTest extends TestCase
     }
 
     public function testSave(){
+        $category = factory(Category::class)->create();
+        $genre = factory(Genre::class)->create();
         $data = [
             [
-                'send_data' => $this->sendData,
+                'send_data' => $this->sendData + [
+                    'categories_id' => [$category->id],
+                    'genres_id' => [$genre->id],
+                ],
                 'test_data' => $this->sendData + ['opened' => false]
             ],
             [
-                'send_data' => $this->sendData + ['opened' => true],
+                'send_data' => $this->sendData + [
+                    'opened' => true,
+                    'categories_id' => [$category->id],
+                    'genres_id' => [$genre->id],
+                ],
                 'test_data' => $this->sendData + ['opened' => true]
             ],
             [
-                'send_data' => $this->sendData + ['rating' => Video::RATING_LIST[1]],
+                'send_data' => $this->sendData + [
+                    'rating' => Video::RATING_LIST[1],
+                    'categories_id' => [$category->id],
+                    'genres_id' => [$genre->id],
+                ],
                 'test_data' => $this->sendData + ['rating' => Video::RATING_LIST[1]]
             ],
         ];
@@ -144,6 +168,35 @@ class VideoControllerTest extends TestCase
                 'updated_at'
             ]);
         }
+    }
+
+    public function testRollbackStore()
+    {
+        $controller = \Mockery::mock(VideoController::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $controller->shouldReceive('validate')
+            ->withAnyArgs()
+            ->andReturn($this->sendData);
+        $controller->shouldReceive('rulesStore')
+            ->withAnyArgs()
+            ->andReturn([]);
+
+        $request = \Mockery::mock(Request::class);
+
+        $controller->shouldReceive('handleRelations')
+            ->once()
+            ->andThrow(new TestException());
+
+        $hasError = false;
+
+        try {
+            $controller->store($request);
+        }catch (TestException $e){
+            $this->assertCount(1, Video::all());
+            $hasError = true;
+        }
+        $this->assertTrue($hasError);
     }
 
     public function testInvalidationCategoriesIdField()

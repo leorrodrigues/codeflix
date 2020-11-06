@@ -2,41 +2,53 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
-use App\Models\Genre;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\TestResponse;
-use Tests\Traits\TestSaves;
+use Illuminate\Http\Request;
+use Tests\TestCase;
+use Lang;
 use Tests\Traits\TestValidations;
+use Tests\Traits\TestSaves;
+use Tests\Exceptions\TestException;
+use App\Http\Controllers\Api\GenreController;
+use App\Models\Genre;
+use App\Models\Category;
+
 
 class GenreControllerTest extends TestCase
 {
+
     use DatabaseMigrations, TestValidations, TestSaves;
 
     private $genre;
+    private $sendData;
 
-    protected function setUp(): void
+    protected function setUp():void
     {
         parent::setUp();
+
         $this->genre = factory(Genre::class)->create();
+
+        $this->sendData = [
+            'name' => 'name',
+            'is_active' => true,
+        ];
+
     }
 
     public function testIndex()
     {
         $response = $this->get(route('genres.index'));
-
         $response
             ->assertStatus(200)
             ->assertJson([$this->genre->toArray()]);
     }
 
-
     public function testShow()
     {
-        $response = $this->get(route('genres.show', ['genre'=> $this->genre->id]));
-
+        $response = $this->get(route('genres.show',['genre'=>$this->genre->id]));
         $response
             ->assertStatus(200)
             ->assertJson($this->genre->toArray());
@@ -44,81 +56,187 @@ class GenreControllerTest extends TestCase
 
     public function testInvalidationData()
     {
-        $data = ['name' => ''];
-        $this->assertInvalidationInStoreAction($data, 'required');
-        $this->assertInvalidationInUpdateAction($data, 'required');
 
         $data = [
-            'name' => str_repeat('a', 256),
+            'name'=>'',
         ];
-        $this->assertInvalidationInStoreAction($data, 'max.string', ['max' => 255]);
-        $this->assertInvalidationInUpdateAction($data, 'max.string', ['max' => 255]);
+        $this->assertInvalidationInStoreAction($data,'required');
+        $this->assertInvalidationInUpdateAction($data,'required');
+
+        $data = [
+            'name' => \str_repeat('a',256)
+        ];
+        $this->assertInvalidationInStoreAction($data,'max.string',['max'=>'255']);
+        $this->assertInvalidationInUpdateAction($data,'max.string',['max'=>'255']);
 
         $data = [
             'is_active' => 'a'
         ];
-        $this->assertInvalidationInStoreAction($data, 'boolean');
-        $this->assertInvalidationInUpdateAction($data, 'boolean');
+        $this->assertInvalidationInStoreAction($data,'boolean');
+        $this->assertInvalidationInUpdateAction($data,'boolean');
+
     }
 
-    public function testStore()
-    {
-        $data = [
-            'name' => 'test'
-        ];
-        $response = $this->assertStore($data, $data+['is_active' => true]);
-        $response->assertJsonStructure([
-            'created_at', 'updated_at'
-        ]);
-
-        $data = [
-            'name' => 'test',
-            'is_active' => false,
-        ];
-        $this->assertStore($data, $data+['is_active' => false]);
+    protected function assertInvalidationRequired(TestResponse $response){
+        $this->assertInvalidationFields(
+            $response,
+            ['name','categories_id'],
+            'required',
+            []
+        );
+        $response
+            ->assertJsonMissingValidationErrors(['is_active']);
     }
 
-    public function testUpdate()
+    protected function assertInvalidationMax(TestResponse $response){
+        $this->assertInvalidationFields(
+            $response,
+            ['name'],
+            'max.string',
+            ['max'=>'255']
+        );
+    }
+
+    protected function assertInvalidationBoolean(TestResponse $response){
+        $this->assertInvalidationFields(
+            $response,
+            ['is_active'],
+            'boolean'
+        );
+    }
+
+    public function testSave()
     {
+        $category = factory(Category::class)->create();
+
         $data = [
-            'name' => 'test',
-            'is_active' => true,
+            [
+                'send_data' => $this->sendData + [
+                    'categories_id' => [$category->id]
+                ],
+                'test_data' => $this->sendData,
+            ]
         ];
-        $response = $this->assertUpdate($data, $data+['deleted_at' => null]);
-        $response->assertJsonStructure([
-            'created_at', 'updated_at'
-        ]);
+
+        foreach ($data as $key => $value){
+            $response = $this->assertStore(
+                $value['send_data'],
+                $value['test_data'] +
+                ['deleted_at' => null]
+            );
+
+            $response->assertJsonStructure([
+                    'created_at',
+                    'updated_at'
+            ]);
+
+            $response = $this->assertUpdate(
+                $value['send_data'],
+                $value['test_data'] +
+                ['deleted_at' => null]
+            );
+
+            $response->assertJsonStructure([
+                    'created_at',
+                    'updated_at'
+            ]);
+        }
+
+    }
+
+   public function testRollbackStore()
+   {
+        $data = [
+            'name'=>'test'
+        ];
+       $controller = \Mockery::mock(GenreController::class)->makePartial()->shouldAllowMockingProtectedMethods();
+       $controller->shouldReceive('handleRelations')->once()->andThrow(new TestException());
+       $controller->shouldReceive('validate')->withAnyArgs()->andReturn($data);
+       $controller->shouldReceive('rulesStore')->withAnyArgs()->andReturn([]);
+
+       $request = \Mockery::mock(Request::class);
+       $request->shouldReceive('get')->withAnyArgs()->andReturnNull();
+
+       $hasError = false;
+       try {
+           $controller->store($request);
+       }catch (TestException $e){
+           $this->assertCount(1, Genre::all());
+           $hasError = true;
+       }
+       $this->assertTrue($hasError);
+   }
+
+   public function testRollbackUpdate()
+   {
+        $controller = \Mockery::mock(GenreController::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $controller->shouldReceive('validate')
+            ->withAnyArgs()
+            ->andReturn($this->sendData);
+        $controller->shouldReceive('rulesStore')
+            ->withAnyArgs()
+            ->andReturn([]);
+
+        $request = \Mockery::mock(Request::class);
+
+        $controller->shouldReceive('handleRelations')
+            ->once()
+            ->andThrow(new TestException());
+
+        $hasError = false;
+
+        $this->genre->refresh();
+
+        try {
+            $controller->update($request, $this->genre->id);
+        }catch (TestException $e){
+            $this->assertEquals($this->genre->toArray(), Genre::find($this->genre->id)->toArray());
+            $hasError = true;
+        }
+        $this->assertTrue($hasError);
     }
 
     public function testDelete()
     {
-        $genre = factory(Genre::class)->create();
-        $response = $this->json(
-            'DELETE',
-            route('genres.destroy', ['genre' => $genre->id])
-        );
+
+        $response = $this->json('DELETE', route('genres.destroy',['genre' => $this->genre->id]));
 
         $response->assertStatus(204);
 
-        $this->assertNull(Genre::find($genre->id));
+        $this->genre->refresh();
 
-        $this->assertNotNull(Genre::withTrashed()->find($genre->id));
+        $this->assertNull(Genre::find($this->genre->id));
+
+        $genres = Genre::all();
+        $this->assertCount(0, $genres);
+
+        $this->assertNotNull($this->genre->deleted_at);
+        $this->assertNotNull(Genre::onlyTrashed()->first());
 
     }
 
-
-    protected function routeStore()
-    {
+    protected function routeStore(){
         return route('genres.store');
     }
 
-    protected function routeUpdate()
-    {
-        return route('genres.update', ['genre' => $this->genre->id]);
+    protected function routeUpdate(){
+        return route('genres.update',['genre'=>$this->genre]);
     }
 
-    protected function model()
-    {
+    protected function model(){
         return Genre::class;
     }
+
+    protected function rulesStore()
+    {
+        return $this->rules;
+    }
+
+    protected function rulesUpdate()
+    {
+        return $this->rules;
+    }
+
 }
