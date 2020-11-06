@@ -1,0 +1,8 @@
+[2020-07-01 17:42:56] testing.ERROR: Allowed memory size of 134217728 bytes exhausted (tried to allocate 65015808 bytes) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 65015808 bytes) at /var/www/tests/Feature/Http/Controllers/Api/GenreControllerTest.php:159)
+[stacktrace]
+#0 {main}
+"} 
+[2020-07-01 17:42:56] testing.ERROR: Allowed memory size of 134217728 bytes exhausted (tried to allocate 65015808 bytes) {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 65015808 bytes) at /var/www/tests/Feature/Http/Controllers/Api/GenreControllerTest.php:159)
+[stacktrace]
+#0 {main}
+"} 
