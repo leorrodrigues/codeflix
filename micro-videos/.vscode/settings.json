@@ -1,10 +1,57 @@
 {
+    "better-phpunit.commandSuffix": "--stop-on-failure",
+    "better-phpunit.phpunitBinary": "/micro-videos/vendor/bin/phpunit",
+    "better-comments.tags": [
 
-    "better-phpunit.commandSuffix": "--stop-on-failure", // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
-    "better-phpunit.suiteSuffix": "--coverage-html reports/", // Specify options to appended only to the 'run suite' command, for example add options like '--testsuite unit' or '--coverage --coverage-xml'.
-    "better-phpunit.docker.enable": true,
-    "better-phpunit.docker.command": "docker exec micro-videos-app",
-    "better-phpunit.docker.paths": {
-        "~/Documents/fullcycle/codeflix/micro-videos": "."
-    }
+        {
+            "tag": "!",
+            "color": "#FF2D00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "?",
+            "color": "#3498DB",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "//",
+            "color": "#474747",
+            "strikethrough": true,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "todo",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
+            "tag": "*",
+            "color": "#98C379",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        }
+    ], // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
+    // "better-phpunit.docker.enable": true,
+    // "better-phpunit.docker.command": "docker-compose exec app",
+    // "better-phpunit.docker.paths": {
+    //     "~/Documents/fullcycle/codeflix/micro-videos": "."
+    // }
 }
