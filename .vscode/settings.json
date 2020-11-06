@@ -1,6 +1,11 @@
 {
     "better-phpunit.commandSuffix": "--stop-on-failure",
-    "better-phpunit.phpunitBinary": "/vendor/bin/phpunit",
+    "better-phpunit.phpunitBinary": "vendor/bin/phpunit",
+    "better-phpunit.docker.enable": true,
+    "better-phpunit.docker.command": "docker-compose exec app",
+    "better-phpunit.docker.paths": {
+        "~/Documents/fullcycle/codeflix": "."
+    },
     "better-comments.tags": [
 
         {
@@ -49,9 +54,5 @@
             "italic": false
         }
     ], // This string will be appended to the phpunit command, it's a great place to add flags like '--stop-on-failure'
-    // "better-phpunit.docker.enable": true,
-    // "better-phpunit.docker.command": "docker-compose exec app",
-    // "better-phpunit.docker.paths": {
-    //     "~/Documents/fullcycle/codeflix/micro-videos": "."
-    // }
+
 }

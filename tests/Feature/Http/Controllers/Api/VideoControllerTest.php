@@ -73,7 +73,7 @@ class VideoControllerTest extends TestCase
         $this->assertInvalidationInUpdateAction($data, 'required');
     }
 
-    protected function testInvalidationMax(){
+    public function testInvalidationMax(){
         $data = [
             'title' => str_repeat('a', 256),
         ];
@@ -82,7 +82,7 @@ class VideoControllerTest extends TestCase
         $this->assertInvalidationInUpdateAction($data, 'max.string', ['max' => 255]);
     }
 
-    protected function testInvalidationInteger(){
+    public function testInvalidationInteger(){
         $data = [
             'duration' => 's',
         ];
@@ -91,7 +91,7 @@ class VideoControllerTest extends TestCase
         $this->assertInvalidationInUpdateAction($data, 'integer');
     }
 
-    protected function testInvalidationYearLaunchedField(){
+    public function testInvalidationYearLaunchedField(){
         $data = [
             'year_launched' => 'a',
         ];
@@ -100,7 +100,7 @@ class VideoControllerTest extends TestCase
         $this->assertInvalidationInUpdateAction($data, 'date_format', ['format' => 'Y']);
     }
 
-    protected function testInvalidationOpenedField(){
+    public function testInvalidationOpenedField(){
         $data = [
             'opened' => 's',
         ];
@@ -109,7 +109,7 @@ class VideoControllerTest extends TestCase
         $this->assertInvalidationInUpdateAction($data, 'boolean');
     }
 
-    protected function testInvalidationRatingField(){
+    public function testInvalidationRatingField(){
         $data = [
             'rating' => 0,
         ];
@@ -121,6 +121,7 @@ class VideoControllerTest extends TestCase
     public function testSave(){
         $category = factory(Category::class)->create();
         $genre = factory(Genre::class)->create();
+        $genre->categories()->sync($category->id);
         $data = [
             [
                 'send_data' => $this->sendData + [
@@ -157,6 +158,8 @@ class VideoControllerTest extends TestCase
                 'created_at',
                 'updated_at'
             ]);
+            $this->assertHasCategory($response->json('id'), $value['send_data']['categories_id'][0]);
+            $this->assertHasGenre($response->json('id'), $value['send_data']['genres_id'][0]);
 
             $response = $this->assertUpdate(
                 $value['send_data'],
@@ -167,7 +170,26 @@ class VideoControllerTest extends TestCase
                 'created_at',
                 'updated_at'
             ]);
+            $this->assertHasCategory($response->json('id'), $value['send_data']['categories_id'][0]);
+            $this->assertHasGenre($response->json('id'), $value['send_data']['genres_id'][0]);
         }
+    }
+
+    protected function assertHasCategory($videoId, $categoryId)
+    {
+        $this->assertDatabaseHas('category_video',[
+            'video_id' => $videoId,
+            'category_id' => $categoryId,
+        ]);
+    }
+
+
+    protected function assertHasGenre($videoId, $genreId)
+    {
+        $this->assertDatabaseHas('genre_video',[
+            'video_id' => $videoId,
+            'genre_id' => $genreId,
+        ]);
     }
 
     public function testRollbackStore()
@@ -213,6 +235,14 @@ class VideoControllerTest extends TestCase
         ];
         $this->assertInvalidationInStoreAction($data, 'exists');
         $this->assertInvalidationInUpdateAction($data, 'exists');
+
+        $category = factory(Category::class)->create();
+        $category->delete();
+        $data = [
+            'categories_id' => [$category->id]
+        ];
+        $this->assertInvalidationInStoreAction($data, 'exists');
+        $this->assertInvalidationInUpdateAction($data, 'exists');
     }
 
     public function testInvalidationGenresIdField()
@@ -226,6 +256,14 @@ class VideoControllerTest extends TestCase
 
         $data = [
             'genres_id' => [100]
+        ];
+        $this->assertInvalidationInStoreAction($data, 'exists');
+        $this->assertInvalidationInUpdateAction($data, 'exists');
+
+        $genre = factory(Genre::class)->create();
+        $genre->delete();
+        $data = [
+            'categories_id' => [$genre->id]
         ];
         $this->assertInvalidationInStoreAction($data, 'exists');
         $this->assertInvalidationInUpdateAction($data, 'exists');
