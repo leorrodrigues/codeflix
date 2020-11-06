@@ -1,6 +1,6 @@
 {
     "better-phpunit.commandSuffix": "--stop-on-failure",
-    "better-phpunit.phpunitBinary": "/micro-videos/vendor/bin/phpunit",
+    "better-phpunit.phpunitBinary": "/vendor/bin/phpunit",
     "better-comments.tags": [
 
         {
