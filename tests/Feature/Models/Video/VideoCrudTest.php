@@ -1,38 +1,14 @@
 <?php
 
-namespace Tests\Feature\Models;
+namespace Tests\Feature\Models\Video;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\Video;
+use Illuminate\Database\QueryException;
 use App\Models\Category;
 use App\Models\Genre;
-use Illuminate\Database\QueryException;
+use App\Models\Video;
 
-class VideoTest extends TestCase
+class VideoCrudTest extends BaseVideoTestCase
 {
-
-    use DatabaseMigrations;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->data = [
-            'title' => 'title',
-            'description' => 'description',
-            'year_launched' => 2010,
-            'rating' => Video::RATING_LIST[0],
-            'duration' => 90,
-        ];
-    }
-
-    protected function tearDown(): void
-    {
-        $this->data = null;
-    }
-
     public function testList()
     {
         factory(Video::class,1)->create();
@@ -48,6 +24,7 @@ class VideoTest extends TestCase
                 'opened',
                 'rating',
                 'duration',
+                'video_file',
                 'created_at',
                 'updated_at',
                 'deleted_at'
@@ -119,26 +96,6 @@ class VideoTest extends TestCase
         $this->assertHasCategory($video->id, $category->id);
         $this->assertHasGenre($video->id, $genre->id);
     }
-    public function testDelete()
-    {
-
-        $Video = factory(Video::class)->create();
-        $videos = Video::all();
-        $this->assertCount(1, $videos);
-
-        $Video->delete();
-        $this->assertNull(Video::find($Video->id));
-
-        $videos = Video::all();
-        $this->assertCount(0, $videos);
-
-        $this->assertNotNull($Video->deleted_at);
-        $this->assertNotNull(Video::onlyTrashed()->first());
-
-        $Video->restore();
-        $this->assertNotNull(Video::find($Video->id));
-
-    }
 
     public function testRollbackCreate()
     {
@@ -183,6 +140,26 @@ class VideoTest extends TestCase
         $this->assertTrue($hasError);
     }
 
+    public function testDelete()
+    {
+        $Video = factory(Video::class)->create();
+        $videos = Video::all();
+        $this->assertCount(1, $videos);
+
+        $Video->delete();
+        $this->assertNull(Video::find($Video->id));
+
+        $videos = Video::all();
+        $this->assertCount(0, $videos);
+
+        $this->assertNotNull($Video->deleted_at);
+        $this->assertNotNull(Video::onlyTrashed()->first());
+
+        $Video->restore();
+        $this->assertNotNull(Video::find($Video->id));
+
+    }
+
     public function testHandleRelations()
     {
         $video = factory(Video::class)->create();
@@ -214,22 +191,6 @@ class VideoTest extends TestCase
         $video->refresh();
         $this->assertCount(1, $video->categories);
         $this->assertCount(1, $video->genres);
-    }
-
-    protected function assertHasCategory($videoId, $categoryId)
-    {
-        $this->assertDatabaseHas('category_video', [
-            'video_id' => $videoId,
-            'category_id' => $categoryId
-        ]);
-    }
-
-    protected function assertHasGenre($videoId, $genreId)
-    {
-        $this->assertDatabaseHas('genre_video', [
-            'video_id' => $videoId,
-            'genre_id' => $genreId
-        ]);
     }
 
     public function testSyncCategories()
@@ -295,4 +256,21 @@ class VideoTest extends TestCase
             'video_id' => $video->id
         ]);
     }
+
+    protected function assertHasCategory($videoId, $categoryId)
+    {
+        $this->assertDatabaseHas('category_video', [
+            'video_id' => $videoId,
+            'category_id' => $categoryId
+        ]);
+    }
+
+    protected function assertHasGenre($videoId, $genreId)
+    {
+        $this->assertDatabaseHas('genre_video', [
+            'video_id' => $videoId,
+            'genre_id' => $genreId
+        ]);
+    }
+
 }

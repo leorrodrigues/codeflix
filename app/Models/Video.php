@@ -60,16 +60,20 @@ class Video extends Model
 
     public function update(array $attributes = [], array $options = [])
     {
+        $files = self::extractFiles($attributes);
         try {
             \DB::beginTransaction();
             $saved = parent::update($attributes, $options);
             static::handleRelations($this, $attributes);
             if($saved){
-
+                $this->uploadFiles($files);
             }
             \DB::commit();
-            return $saved;
+            if ($saved && count($files)) {
+                $this->deleteOldFiles($files);
+            }
         } catch( \Exception $e){
+            $this->deleteFile($files);
             \DB::rollBack();
             throw $e;
         }

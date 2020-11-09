@@ -6,6 +6,7 @@ use Illuminate\Http\UploadedFile;
 
 trait UploadFiles
 {
+    protected $oldFiles = [];
     protected abstract function uploadDir();
 
     /**
@@ -28,6 +29,11 @@ trait UploadFiles
         foreach($files as $file) {
             $this->deleteFile($file);
         }
+    }
+
+    public function deleteOldFiles()
+    {
+        $this->deleteFiles($this->oldFiles);
     }
 
     /**
