@@ -40,6 +40,13 @@ class VideoControllerTest extends TestCase
         ];
     }
 
+    protected function tearDown(): void
+    {
+        $this->video = null;
+        $this->sendData = null;
+        parent::tearDown();
+    }
+
     public function testIndex()
     {
         $response = $this->get(route('videos.index'));
@@ -303,16 +310,52 @@ class VideoControllerTest extends TestCase
             ->withAnyArgs()
             ->andReturn([]);
 
+        $controller->shouldReceive('handleRelations')
+            ->once()
+            ->andThrow(new TestException());
+
         $request = \Mockery::mock(Request::class);
+        $request->shouldReceive('get')
+            ->withAnyArgs()
+            ->andReturnNull();
+
+        $hasError = false;
+        try {
+            $controller->store($request);
+        }catch (TestException $e){
+            $this->assertCount(1, Video::all());
+            $hasError = true;
+        }
+        $this->assertTrue($hasError);
+    }
+
+    public function testRollbackUpdate()
+    {
+        $controller = \Mockery::mock(VideoController::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
+        $controller->shouldReceive('findOrFail')
+            ->withAnyArgs()
+            ->andReturn($this->video);
+        $controller->shouldReceive('validate')
+            ->withAnyArgs()
+            ->andReturn($this->sendData);
+        $controller->shouldReceive('rulesUpdate')
+            ->withAnyArgs()
+            ->andReturn([]);
 
         $controller->shouldReceive('handleRelations')
             ->once()
             ->andThrow(new TestException());
 
-        $hasError = false;
+        $request = \Mockery::mock(Request::class);
+        $request->shouldReceive('get')
+            ->withAnyArgs()
+            ->andReturnNull();
 
+        $hasError = false;
         try {
-            $controller->store($request);
+            $controller->update($request, 1);
         }catch (TestException $e){
             $this->assertCount(1, Video::all());
             $hasError = true;
@@ -351,7 +394,6 @@ class VideoControllerTest extends TestCase
         ];
         $this->assertInvalidationInStoreAction($data, 'array');
         $this->assertInvalidationInUpdateAction($data, 'array');
-
 
         $data = [
             'genres_id' => [100]
