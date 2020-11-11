@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\Models\CastMember;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Tests\Traits\TestSaves;
 use Tests\Traits\TestValidations;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Testing\TestResponse;
 
 class CastMemberControllerTest extends TestCase
 {
-    use DatabaseMigrations, TestValidations, TestSaves;
+    use RefreshDatabase, TestValidations, TestSaves;
 
     private $castMember;
 

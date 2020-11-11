@@ -5,7 +5,7 @@ services:
     app:
         build:
           context: .
-          dockerfile: .docker/app/Dockerfile
+          dockerfile: .docker/app/Dockerfile.prod
         container_name: micro-videos-app
         volumes:
             - .:/var/www
@@ -30,7 +30,7 @@ services:
             - app
 
     db:
-        image: mysql:5.7
+        build: ./.docker/mysql
         command: --innodb-use-native-aio=0
         container_name: micro-videos-db
         restart: always
