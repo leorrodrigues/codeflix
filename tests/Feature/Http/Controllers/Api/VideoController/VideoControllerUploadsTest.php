@@ -9,7 +9,7 @@ use Tests\Traits\TestUploads;
 use App\Models\Category;
 use App\Models\Genre;
 
-class VideoControllerTest extends BaseVideoControllerTestCase
+class VideoControllerUploadsTest extends BaseVideoControllerTestCase
 {
     use TestValidations, TestUploads;
 

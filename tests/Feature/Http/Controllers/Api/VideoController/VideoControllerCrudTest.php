@@ -9,7 +9,7 @@ use App\Models\Category;
 use App\Models\Video;
 use App\Models\Genre;
 
-class VideoControllerTest extends BaseVideoControllerTestCase
+class VideoControllerCrudTest extends BaseVideoControllerTestCase
 {
     use TestValidations, TestSaves;
 
