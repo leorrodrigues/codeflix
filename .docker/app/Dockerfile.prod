@@ -15,10 +15,10 @@ RUN rm -rf /var/www/html
 RUN ln -s public html
 COPY . /var/www
 
-RUN composer install \
-             && php artisan key:generate \
-             && php artisan cache:clear \
-             && chmod -R 775 storage
+RUN composer install
+RUN php artisan key:generate
+RUN php artisan cache:clear
+RUN chmod -R 775 storage
 
 RUN npm install
 
