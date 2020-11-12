@@ -7,11 +7,17 @@ use App\Models\Traits\Uuid;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use PHPUnit\Framework\TestCase;
 
-class GenreTest extends TestCase
+class GenreUnitTest extends TestCase
 {
     protected function setUp(): void {
         parent::setUp();
         $this->genre = new Genre();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->genre = null;
+        parent::tearDown();
     }
 
     public function testIfUseTraits(){

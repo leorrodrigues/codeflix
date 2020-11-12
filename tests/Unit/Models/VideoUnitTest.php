@@ -7,7 +7,7 @@ use App\Models\Traits\Uuid;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use PHPUnit\Framework\TestCase;
 
-class VideoTest extends TestCase
+class VideoUnitTest extends TestCase
 {
 
     private $video;
@@ -16,6 +16,12 @@ class VideoTest extends TestCase
     {
         parent::setUp();
         $this->video = new Video();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->video = null;
+        parent::tearDown();
     }
 
     public function testFillableAttribute()

@@ -34,6 +34,13 @@ class GenresHasCategoriesRuleTest extends TestCase
         );
     }
 
+    protected function tearDown(): void
+    {
+        $this->categories = null;
+        $this->genres = null;
+        parent::tearDown();
+    }
+
     public function testPassesIsValid()
     {
         $rule = new GenresHasCategoriesRule(

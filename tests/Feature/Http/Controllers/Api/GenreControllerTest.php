@@ -38,6 +38,13 @@ class GenreControllerTest extends TestCase
 
     }
 
+    protected function tearDown(): void
+    {
+        $this->genre = null;
+        $this->sendData = null;
+        parent::tearDown();
+    }
+
     public function testIndex()
     {
         $response = $this->get(route('genres.index'));
