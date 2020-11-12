@@ -82,20 +82,20 @@ class VideoCrudTest extends BaseVideoTestCase
 
     public function testUpdateWithBasicFields()
     {
-        $video = factory(Video::class)->create(
-            ['opened' => false] + $this->fileFieldsData
-        );
-        $video->update($this->data);
+        $video = factory(Video::class)->create([
+            'opened' => false
+        ]);
 
+        $video->update($this->data + $this->fileFieldsData);
         $this->assertFalse($video->opened);
-        $this->assertDatabaseHas('videos', $this->data + $this->fileFieldsData + ['opened'=>false]);
+        $this->assertDatabaseHas('videos', $this->data + $this->fileFieldsData + ['opened' => false]);
 
-        $video = factory(Video::class)->create(
-            ['opened' => false]
-        );
-        $video->update($this->data + ['opened' => true]);
+        $video = factory(Video::class)->create([
+            'opened' => false
+        ]);
+        $video->update($this->data + $this->fileFieldsData + ['opened' => true]);
         $this->assertTrue($video->opened);
-        $this->assertDatabaseHas('videos', $this->data + $this->fileFieldsData + ['opened'=>true]);
+        $this->assertDatabaseHas('videos', $this->data + ['opened' => true]);
     }
 
     public function testUpdateWithRelations()
