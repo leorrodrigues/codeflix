@@ -1,7 +1,25 @@
 steps:
+
+  - id: 'Decrypting credentials'
+    name: 'grc.io/cloud-builders/gcloud'
+    args:
+      - kms
+      - decrypt
+      - --ciphertext-file=./storage/credentials/gcp/service-account-storage.json.enc
+      - --plaintext-file=./storage/credentials/gcp/service-account-storage.json
+      - --location=global
+      - --keyring=micro-videos
+      - --key=service-account
+
   - id: 'Running docker-compose'
     name: 'gcr.io/$PROJECT_ID/docker-compose'
     args: ['-f','docker-compose.prod.yaml', 'up', '-d']
+    env:
+      - GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID
+      - GOOGLE_CLOUD_KEY_FILE=service-account-storage.json
+      - GOOGLE_CLOUD_STORAGE_BUCKET=code-micro-videos-bucket
+      - GOOGLE_CLOUD_STORAGE_API_URI=https://storage.cloud.google.com/code-micro-videos-bucket
+      - TESTING_PROD=true
 
   - id: 'Running composer'
     name: 'gcr.io/cloud-builders/docker'
