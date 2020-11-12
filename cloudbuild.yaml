@@ -1,7 +1,7 @@
 steps:
 
   - id: 'Decrypting credentials'
-    name: 'grc.io/cloud-builders/gcloud'
+    name: 'gcr.io/cloud-builders/gcloud'
     args:
       - kms
       - decrypt
