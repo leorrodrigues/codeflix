@@ -21,14 +21,6 @@ steps:
       - GOOGLE_CLOUD_STORAGE_API_URI=https://storage.cloud.google.com/code-micro-videos-bucket
       - TESTING_PROD=true
 
-  - id: "Chown in /var/www"
-    name: 'gcr.io/cloud-builders/docker'
-    args: ['exec','-u','root','-t','app','chown','-R','www-data:www-data','/var/www']
-
-  - id: "Running docker ps"
-    name: "gcr.io/cloud-builders/docker"
-    args: ["ps"]
-
   - id: 'Running composer'
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-t','micro-videos-app','composer','install']
