@@ -36,7 +36,9 @@ services:
             - app
 
     db:
-        build: ./.docker/mysql
+        build:
+          context: .
+          dockerfile: ./.docker/mysql/Dockerfile.prod
         command: --innodb-use-native-aio=0
         container_name: db
         restart: always
