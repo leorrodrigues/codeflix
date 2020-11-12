@@ -1,14 +1,16 @@
 <?php
 
-namespace Tests\Unit\Models;
+namespace Tests\Prod\Models\Traits;
 
-use PHPUnit\Framework\TestCase;
-use Tests\Stubs\Models\UploadFilesStub;
+use Tests\TestCase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use Tests\Stubs\Models\UploadFilesStub;
 use Tests\Traits\TestProd;
 use Tests\Traits\TestStorages;
 
-class UploadedFilesProdTest extends TestCase
+class UploadFilesProdTest extends TestCase
 {
     use TestStorages, TestProd;
 
