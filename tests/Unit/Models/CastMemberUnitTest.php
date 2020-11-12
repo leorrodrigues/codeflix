@@ -14,22 +14,28 @@ class CastMemberTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->CastMember = new CastMember();
+        $this->castMember = new CastMember();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->castMember = null;
+        parent::tearDown();
     }
 
     public function testFillableAttribute()
     {
         $fillable = ['name','type','is_active'];
-        $this->assertEquals($fillable,$this->CastMember->getFillable());
+        $this->assertEquals($fillable,$this->castMember->getFillable());
     }
 
     public function testDatesAttribute()
     {
         $dates = ['deleted_at','created_at','updated_at'];
         foreach ($dates as $date){
-            $this->assertContains($date,$this->CastMember->getDates());
+            $this->assertContains($date,$this->castMember->getDates());
         }
-        $this->assertCount(count($dates),$this->CastMember->getDates());
+        $this->assertCount(count($dates),$this->castMember->getDates());
     }
 
     public function testIfUseTraits()
@@ -44,11 +50,11 @@ class CastMemberTest extends TestCase
     public function testCastsAttribute()
     {
         $casts = ['id'=>'string', 'type'=>'integer', 'is_active'=>'boolean'];
-        $this->assertEquals($casts,$this->CastMember->getCasts());
+        $this->assertEquals($casts,$this->castMember->getCasts());
     }
 
     public function testIncrementingAttribute()
     {
-        $this->assertFalse($this->CastMember->incrementing);
+        $this->assertFalse($this->castMember->incrementing);
     }
 }

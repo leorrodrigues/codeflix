@@ -18,6 +18,12 @@ class VideoUnitTest extends TestCase
         $this->video = new Video();
     }
 
+    protected function tearDown(): void
+    {
+        $this->video = null;
+        parent::tearDown();
+    }
+
     public function testFillableAttribute()
     {
         $fillable = [

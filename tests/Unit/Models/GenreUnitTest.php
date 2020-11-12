@@ -14,6 +14,12 @@ class GenreUnitTest extends TestCase
         $this->genre = new Genre();
     }
 
+    protected function tearDown(): void
+    {
+        $this->genre = null;
+        parent::tearDown();
+    }
+
     public function testIfUseTraits(){
         $traits = [
             Uuid::class,

@@ -14,6 +14,12 @@ class CategoryUnitTest extends TestCase
         $this->category = new Category();
     }
 
+    protected function tearDown(): void
+    {
+        $this->category = null;
+        parent::tearDown();
+    }
+
     public function testIfUseTraits(){
         $traits = [
             Uuid::class,

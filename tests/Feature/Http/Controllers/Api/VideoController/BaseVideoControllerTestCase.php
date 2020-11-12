@@ -35,8 +35,8 @@ abstract class BaseVideoControllerTestCase extends TestCase
 
     protected function tearDown(): void
     {
-        // $this->video = null;
-        // $this->sendData = null;
+        $this->video = null;
+        $this->sendData = null;
         parent::tearDown();
     }
 }

@@ -23,6 +23,7 @@ class Video extends Model
         'rating',
         'duration',
         'video_file',
+        'thumb_file',
     ];
     protected $dates = ['deleted_at'];
     protected $casts = [
@@ -36,6 +37,7 @@ class Video extends Model
 
     public static $fileFields = [
         'video_file',
+        'thumb_file',
     ];
 
     public static function create(array $attributes = [])
@@ -51,7 +53,7 @@ class Video extends Model
             return $obj;
         } catch( \Exception $e){
             if(isset($obj)) {
-
+                $obj->deleteFiles($files);
             }
             \DB::rollBack();
             throw $e;

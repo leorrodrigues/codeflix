@@ -24,6 +24,12 @@ class CastMemberControllerTest extends TestCase
         ]);
     }
 
+    protected function tearDown(): void
+    {
+        $this->castMember = null;
+        parent::tearDown();
+    }
+
     public function testIndex()
     {
         $response = $this->get(route('cast_members.index'));
