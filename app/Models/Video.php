@@ -74,8 +74,9 @@ class Video extends Model
             if ($saved && count($files)) {
                 $this->deleteOldFiles($files);
             }
+            return $saved;
         } catch( \Exception $e){
-            $this->deleteFile($files);
+            $this->deleteFiles($files);
             \DB::rollBack();
             throw $e;
         }
