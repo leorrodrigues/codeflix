@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 use App\Models\Video;
+use App\Models\Genre;
+use App\Models\Category;
 
 abstract class BaseVideoControllerTestCase extends TestCase
 {
@@ -20,8 +22,15 @@ abstract class BaseVideoControllerTestCase extends TestCase
 
         $this->video = factory(Video::class)->create([
             'opened' => false,
+            'thumb_file' => 'thumb.jpg',
+            'banner_file' => 'banner.jpg',
+            'trailer_file' => 'trailer.mp4',
             'video_file' => 'video.mp4',
         ]);
+
+        $category = factory(Category::class)->create();
+        $genre = factory(Genre::class)->create();
+        $genre->categories()->sync($category->id);
 
         $this->sendData = [
             'title' => 'title',
@@ -30,6 +39,8 @@ abstract class BaseVideoControllerTestCase extends TestCase
             'rating' => Video::RATING_LIST[0],
             'duration' => 90,
             'opened' => false,
+            'categories_id' => [$category->id],
+            'genres_id' => [$genre->id],
         ];
     }
 

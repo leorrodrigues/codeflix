@@ -105,6 +105,9 @@ namespace App\Models{
  * @property bool $opened
  * @property string $rating
  * @property int $duration
+ * @property string|null $thumb_file
+ * @property string|null $banner_file
+ * @property string|null $trailer_file
  * @property string|null $video_file
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -113,10 +116,15 @@ namespace App\Models{
  * @property-read int|null $categories_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Genre[] $genres
  * @property-read int|null $genres_count
+ * @property-read mixed $banner_file_url
+ * @property-read mixed $thumb_file_url
+ * @property-read mixed $trailler_file_url
+ * @property-read mixed $video_file_url
  * @method static \Illuminate\Database\Eloquent\Builder|Video newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Video newQuery()
  * @method static \Illuminate\Database\Query\Builder|Video onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Video query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Video whereBannerFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereDescription($value)
@@ -124,7 +132,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereOpened($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Video whereThumbFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Video whereTrailerFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereVideoFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Video whereYearLaunched($value)
