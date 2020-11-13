@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\TestResponse;
+use PHPUnit\Framework\TestResult;
 use Tests\TestCase;
 
 trait TestSaves {
@@ -41,13 +42,17 @@ trait TestSaves {
     private function assertInDatabase($response, $testDatabase){
         $model = $this->model();
         $tabela = (new $model)->getTable();
-        $this->assertDatabaseHas($tabela, $testDatabase + ['id' => $response->json('id')]);
+        $this->assertDatabaseHas($tabela, $testDatabase + [ 'id' => $this->getIdFromResponse($response)]);
     }
 
     private function assertJsonResponseContent($response, $testDatabase, $testJsonData){
         $testResponse = $testJsonData ?? $testDatabase;
-        $response->assertJsonFragment($testResponse + ['id' => $response->json('id')]);
+        $response->assertJsonFragment($testResponse + [ 'id' => $this->getIdFromResponse($response)]);
         return $response;
+    }
+
+    private function getIdFromResponse(TestResponse $response) {
+        return $response->json('id') ?? $response->json('data.id');
     }
 
 }
