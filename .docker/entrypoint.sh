@@ -4,7 +4,7 @@
 cp .env.example .env
 cp .env.testing.example .env.testing
 composer install
-chmod -R 777 /var/www/storage
+chmod -R 755 /var/www/storage
 php artisan key:generate
 php artisan migrate
 

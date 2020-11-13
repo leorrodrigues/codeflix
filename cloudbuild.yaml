@@ -1,28 +1,50 @@
 steps:
+
+  - id: 'Decrypting credentials'
+    name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - kms
+      - decrypt
+      - --ciphertext-file=./storage/credentials/gcp/service-account-storage.json.enc
+      - --plaintext-file=./storage/credentials/gcp/service-account-storage.json
+      - --location=global
+      - --keyring=micro-videos
+      - --key=service-account
+
   - id: 'Running docker-compose'
     name: 'gcr.io/$PROJECT_ID/docker-compose'
     args: ['-f','docker-compose.prod.yaml', 'up', '-d']
+    env:
+      - GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID
+      - GOOGLE_CLOUD_KEY_FILE=service-account-storage.json
+      - GOOGLE_CLOUD_STORAGE_BUCKET=code-micro-videos-bucket
+      - GOOGLE_CLOUD_STORAGE_API_URI=https://storage.cloud.google.com/code-micro-videos-bucket
+      - TESTING_PROD=true
+
+  - id: "Chown in /var/www"
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-u','root','-t','app','chown','-R','www-data:www-data','/var/www']
 
   - id: 'Running composer'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec','-t','micro-videos-app','composer','install']
+    args: ['exec','-t','app','composer','install']
 
   - id: 'Copying .env'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'micro-videos-app', 'cp', '.env.example','.env']
+    args: ['exec', '-t', 'app', 'cp', '.env.example','.env']
 
   - id: 'Copying .env.testing'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'micro-videos-app', 'cp', '.env.testing.example','.env.testing']
+    args: ['exec', '-t', 'app', 'cp', '.env.testing.example','.env.testing']
 
   - id: 'Running key:generate'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','micro-videos-app','php','/var/www/artisan','key:generate']
+    args: [ 'exec','-t','app','php','/var/www/artisan','key:generate']
 
   - id: 'Running migrations'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','micro-videos-app','php','/var/www/artisan','migrate']
+    args: [ 'exec','-t','app','php','/var/www/artisan','migrate']
 
   - id: 'Running PhpUnit'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','micro-videos-app','php','/var/www/vendor/bin/phpunit','-c','/var/www/phpunit.xml']
+    args: [ 'exec','-t','app','php','/var/www/vendor/bin/phpunit','-c','/var/www/phpunit.xml']
