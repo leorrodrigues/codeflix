@@ -3,11 +3,12 @@
 namespace Tests\Feature\Http\Controllers\Api\VideoController;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\TestResponse;
 use Tests\TestCase;
 
+use App\Models\Category;
 use App\Models\Video;
 use App\Models\Genre;
-use App\Models\Category;
 
 abstract class BaseVideoControllerTestCase extends TestCase
 {
@@ -49,5 +50,19 @@ abstract class BaseVideoControllerTestCase extends TestCase
         $this->video = null;
         $this->sendData = null;
         parent::tearDown();
+    }
+
+    protected function assertIfFilesUrlExists(Video $video, TestResponse $response)
+    {
+        $fileFields = Video::$fileFields;
+        $data = $response->json('data');
+        $data = array_key_exists(0,$data) ? $data[0]: $data;
+        foreach($fileFields as $field) {
+            $file = $video->{$field};
+            $this->assertEquals(
+                \Storage::url($video->relativeFilePath($file)),
+                $data[$field . '_url']
+            );
+        }
     }
 }
