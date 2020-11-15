@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use Illuminate\Http\Request;
 
 class CategoryController extends BasicCrudController
 {
@@ -14,18 +12,6 @@ class CategoryController extends BasicCrudController
         'is_active' => 'boolean',
         'description' => 'nullable',
     ];
-
-    public function index()
-    {
-        $collection = parent::index();
-        return CategoryResource::collection($collection);
-    }
-
-    public function show($id)
-    {
-        $obj = parent::show($id);
-        return new CategoryResource($obj);
-    }
 
     protected function model()
     {
@@ -41,6 +27,11 @@ class CategoryController extends BasicCrudController
     {
 
         return $this->rules;
+    }
+
+    protected function ResourceCollection()
+    {
+        return $this->resource();
     }
 
     protected function resource()
