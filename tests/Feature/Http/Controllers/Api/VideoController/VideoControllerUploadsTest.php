@@ -97,7 +97,7 @@ class VideoControllerUploadsTest extends BaseVideoControllerTestCase
         $response->assertStatus(200);
         $this->assertFilesOnPersist($response, Arr::except($files, ['thumb_file', 'trailer_file']) + $newFiles);
 
-        $id = $response->json('id');
+        $id = $response->json('data.id');
         $video = Video::find($id);
         \Storage::assertMissing($video->relativeFilePath($files['thumb_file']->hashName()));
         \Storage::assertMissing($video->relativeFilePath($files['trailer_file']->hashName()));
@@ -105,7 +105,7 @@ class VideoControllerUploadsTest extends BaseVideoControllerTestCase
 
     protected function assertFilesOnPersist(TestResponse $response, $files)
     {
-        $id = $response->json('id');
+        $id = $response->json('id') ?? $response->json('data.id');
         $video = Video::find($id);
         $this->assertFilesExistsInStorage($video, $files);
     }

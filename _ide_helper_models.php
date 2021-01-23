@@ -118,7 +118,7 @@ namespace App\Models{
  * @property-read int|null $genres_count
  * @property-read mixed $banner_file_url
  * @property-read mixed $thumb_file_url
- * @property-read mixed $trailler_file_url
+ * @property-read mixed $trailer_file_url
  * @property-read mixed $video_file_url
  * @method static \Illuminate\Database\Eloquent\Builder|Video newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Video newQuery()

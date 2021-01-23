@@ -5,8 +5,8 @@ steps:
     args:
       - kms
       - decrypt
-      - --ciphertext-file=./storage/credentials/gcp/service-account-storage.json.enc
-      - --plaintext-file=./storage/credentials/gcp/service-account-storage.json
+      - --ciphertext-file=./storage/credentials/gcp/service-account.json.enc
+      - --plaintext-file=./storage/credentials/gcp/service-account.json
       - --location=global
       - --keyring=micro-videos
       - --key=service-account
@@ -16,7 +16,7 @@ steps:
     args: ['-f','docker-compose.prod.yaml', 'up', '-d']
     env:
       - GOOGLE_CLOUD_PROJECT_ID=$PROJECT_ID
-      - GOOGLE_CLOUD_KEY_FILE=service-account-storage.json
+      - GOOGLE_CLOUD_KEY_FILE=service-account.json
       - GOOGLE_CLOUD_STORAGE_BUCKET=code-micro-videos-bucket
       - GOOGLE_CLOUD_STORAGE_API_URI=https://storage.cloud.google.com/code-micro-videos-bucket
       - TESTING_PROD=true
