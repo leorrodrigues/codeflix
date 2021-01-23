@@ -26,7 +26,7 @@ steps:
 
   - id: 'Running composer'
     name: 'gcr.io/cloud-builders/docker'
-    dir: '/var/www/backend'
+    dir: 'backend'
     args: ['exec','-t','app','composer','install']
 
   - id: 'Copying .env'
