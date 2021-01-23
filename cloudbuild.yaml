@@ -4,8 +4,8 @@ steps:
     args:
       - kms
       - decrypt
-      - --ciphertext-file=./storage/credentials/gcp/service-account.json.enc
-      - --plaintext-file=./storage/credentials/gcp/service-account.json
+      - --ciphertext-file=./backend/storage/credentials/gcp/service-account.json.enc
+      - --plaintext-file=./backend/storage/credentials/gcp/service-account.json
       - --location=global
       - --keyring=micro-videos
       - --key=service-account
@@ -19,6 +19,10 @@ steps:
       - GOOGLE_CLOUD_STORAGE_BUCKET=code-micro-videos-bucket
       - GOOGLE_CLOUD_STORAGE_API_URI=https://storage.cloud.google.com/code-micro-videos-bucket
       - TESTING_PROD=true
+    
+  - id: 'Changing the directory to Backend'
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['exec','-u','root','-t','app','cd','backend']
 
   - id: "Chown in /var/www"
     name: 'gcr.io/cloud-builders/docker'
