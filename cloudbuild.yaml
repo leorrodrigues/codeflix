@@ -5,8 +5,8 @@ steps:
     args:
       - kms
       - decrypt
-      - --ciphertext-file=./storage/credentials/gcp/service-account-storage.json.enc
-      - --plaintext-file=./storage/credentials/gcp/service-account-storage.json
+      - --ciphertext-file=./storage/credentials/gcp/service-account.json.enc
+      - --plaintext-file=./storage/credentials/gcp/service-account.json
       - --location=global
       - --keyring=micro-videos
       - --key=service-account
