@@ -1,5 +1,5 @@
 steps:
-  - id: 'Moving to backend'
+  - id: 'Moving to backend.'
     args: ['cd', 'backend']
 
   - id: 'Decrypting credentials'
