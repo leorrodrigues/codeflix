@@ -5,8 +5,8 @@ steps:
     args:
       - kms
       - decrypt
-      - --ciphertext-file=./storage/credentials/gcp/service-account.json.enc
-      - --plaintext-file=./storage/credentials/gcp/service-account.json
+      - --ciphertext-file=./backend/storage/credentials/gcp/service-account.json.enc
+      - --plaintext-file=./backend/storage/credentials/gcp/service-account.json
       - --location=global
       - --keyring=micro-videos
       - --key=service-account
@@ -31,20 +31,20 @@ steps:
 
   - id: 'Copying .env'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'app', 'cp', '.env.example','.env']
+    args: ['exec', '-t', 'app', 'cp', './backend/.env.example','./backend/.env']
 
   - id: 'Copying .env.testing'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec', '-t', 'app', 'cp', '.env.testing.example','.env.testing']
+    args: ['exec', '-t', 'app', 'cp', './backend/.env.testing.example','./backend/.env.testing']
 
   - id: 'Running key:generate'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','app','php','/var/www/artisan','key:generate']
+    args: [ 'exec','-t','app','php','/var/www/backend/artisan','key:generate']
 
   - id: 'Running migrations'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','app','php','/var/www/artisan','migrate']
+    args: [ 'exec','-t','app','php','/var/www/backend/artisan','migrate']
 
   - id: 'Running PhpUnit'
     name: 'gcr.io/cloud-builders/docker'
-    args: [ 'exec','-t','app','php','/var/www/vendor/bin/phpunit','-c','/var/www/phpunit.xml']
+    args: [ 'exec','-t','app','php','/var/www/backend/vendor/bin/phpunit','-c','/var/www/backend/phpunit.xml']
