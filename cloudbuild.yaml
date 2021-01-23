@@ -1,7 +1,4 @@
 steps:
-  - id: 'Moving to backend.'
-    args: ['cd', 'backend']
-
   - id: 'Decrypting credentials'
     name: 'gcr.io/cloud-builders/gcloud'
     args:
