@@ -22,7 +22,7 @@ steps:
     
   - id: 'Changing the directory to Backend'
     name: 'gcr.io/cloud-builders/docker'
-    args: ['exec','-t','app','cd','backend']
+    args: ['exec','-t','app','bash', '-c', '"cd backend"']
 
   - id: "Chown in /var/www"
     name: 'gcr.io/cloud-builders/docker'
