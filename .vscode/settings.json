@@ -1,6 +1,6 @@
 {
     "better-phpunit.commandSuffix": "--stop-on-failure",
-    "better-phpunit.phpunitBinary": "vendor/bin/phpunit",
+    "better-phpunit.phpunitBinary": "backend/vendor/bin/phpunit",
     "better-phpunit.docker.enable": true,
     "better-phpunit.docker.command": "docker-compose exec app",
     "better-phpunit.docker.paths": {

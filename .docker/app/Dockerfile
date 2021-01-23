@@ -12,6 +12,7 @@ RUN apk add --no-cache openssl \
     libpng-dev
 
 RUN touch /home/www-data/.bashrc | echo "PS1='\w\$ '" >> /home/www-data/.bashrc
+RUN touch /root/.bashrc | echo "PS1='\w\$ '" >> /root/.bashrc
 
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include --with-png-dir=/usr/include/
