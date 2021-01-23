@@ -24,11 +24,6 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-u','root','-t','app','chown','-R','www-data:www-data','/var/www']
 
-  - id: "Moving to other directory"
-    name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args: ['cd','/var/www/backend']
-
   - id: 'Running composer'
     name: 'gcr.io/cloud-builders/docker'
     args: ['exec','-t','app','composer','install"']
