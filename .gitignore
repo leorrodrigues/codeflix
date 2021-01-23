@@ -1,3 +1,5 @@
-./docker/dbdata/*
+.docker/dbdata/*
 .vscode/
 .devcontainer/
+.npm-cache/*
+frontend/node_modules

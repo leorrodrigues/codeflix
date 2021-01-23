@@ -5,7 +5,7 @@ services:
     app:
         build:
           context: .
-          dockerfile: .docker/app/Dockerfile.prod
+          dockerfile: .docker/app/Dockerfile
         container_name: app
         environment:
           - GOOGLE_CLOUD_PROJECT_ID=${GOOGLE_CLOUD_PROJECT_ID}
@@ -36,9 +36,7 @@ services:
             - app
 
     db:
-        build:
-          context: .
-          dockerfile: ./.docker/mysql/Dockerfile.prod
+        build: ./.docker/mysql
         command: --innodb-use-native-aio=0
         container_name: db
         restart: always
